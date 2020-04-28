@@ -5,20 +5,9 @@ const bodyParser = require( 'body-parser' );
 const cors = require( 'cors' );
 const PORT = process.env.PORT || 4000;
 
-const projectData = {}
+let data = []
+let projectData = {};
 
-//Helper Functions
-const addData = ( req, res ) => {
-    let data = req.body;
-    let newEntry = {
-        date: data.date,
-        input: data.input,
-        temp: data.temp
-    }
-
-    projectData.push( newEntry );
-    return newEntry;
-}
 
 // Start up an instance of app
 const app = express();
@@ -40,12 +29,30 @@ app.listen( PORT, () => {
 } )
 
 // Initialize all route with a callback function
+function callBack ( req, res ) {
+    res.send('POST received')
+}
+
+app.post( '/add', callBack );
+  
+const addData = (req, res) => {
+    const newData = req.body;
+    console.log( data );
+    projectData = {
+        date: newData.date,
+        input: newData.input,
+        temp: newData.temp
+    }
+    
+    data.push( projectData );
+};
+
+const sendData = ( req, res ) => {
+    res.send( data.projectData );
+}
 
 // Callback function to complete GET '/all'
-app.get( '/all', ( req, res ) => {
-    res.send( appData );
-})
+app.get( '/all', sendData );
 
 // Post Route
-app.post( '/add', addData );
-  
+app.post( '/info', addData );
