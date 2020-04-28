@@ -76,6 +76,8 @@ h1 {
     margin-left: 15rem;
     box-shadow: 3px 3px 7px rgba(0,0,20,0.4), 4px 6px 9px rgba(0,0,20,0.4);
     overflow: visible;
+    position: relative;
+    bottom: 15rem;
 }
 
 .zip-box {
@@ -118,14 +120,8 @@ h1 {
     font-size: 2rem;
 };
 
-textarea {
-    resize: none;
-    margin-top: 3rem;
-    font-size: 2rem;
-    border-radius: 15px;
-    padding-left: 3rem;
-    margin-bottom: 2rem;
-    
+.userInput {
+    font-size: 1.8rem;
 }
 
 #generate {
@@ -146,4 +142,31 @@ textarea {
 #generate:hover {
     background-color: #6ba184;
     box-shadow: none;
+}
+
+.results-img {
+    width: 40rem;
+    height: 30rem;
+    background: url(../images/sun.jpg) no-repeat center;
+    background-size: cover;
+    position: relative;
+    bottom: 38rem;
+    left: 25rem;
+    z-index: -4;
+}
+
+.results {
+    background: #bfa07e;
+    height: 25rem;
+    width: 35rem;
+    position: relative;
+    right: 15rem;
+    top: 5rem;
+    font-size: 1.8rem;
+    padding: 1rem;
+    line-height: 1.8;
+}
+
+.results h2 {
+    font-size: 2.2rem;
 }
