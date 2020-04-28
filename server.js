@@ -34,21 +34,20 @@ function callBack ( req, res ) {
 }
 
 app.post( '/add', callBack );
+
   
 const addData = (req, res) => {
     const newData = req.body;
-    console.log( data );
-    projectData = {
-        date: newData.date,
-        input: newData.input,
-        temp: newData.temp
-    }
-    
-    data.push( projectData );
+    projectData.date = newData.date;
+    projectData.input = newData.input;
+    projectData.temp = newData.temp;
+    console.log(projectData)
+    return projectData;
 };
 
 const sendData = ( req, res ) => {
-    res.send( data.projectData );
+    console.log(projectData)
+    res.send( projectData );
 }
 
 // Callback function to complete GET '/all'

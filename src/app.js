@@ -10,31 +10,13 @@ const generate = document.getElementById('generate');
 
 // Helper functions
 let d = new Date();
-let newDate = d.getMonth() + '.' + d.getDate() + '' + d.getFullYear();
+let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 
 const kelvinToF = (temp) => {
 	const t = ((temp - 273.15) * 9) / 5 + 32;
 	return Math.round(t);
 };
 
-// Event listener to add function to existing HTML DOM element
-
-/* Function called by event listener */
-const performAction = (e) => {
-	const zipCode = zip.value;
-	const userInput = input.value;
-
-	getWeather(zipCode)
-		.then((data) => {
-			let tempK = data.main.temp;
-			let temp = kelvinToF(tempK);
-			postData('/add', { temp: temp, input: userInput, date: newDate });
-		})
-		.then(updateUI())
-		.catch((error) => console.log(error));
-};
-
-generate.addEventListener('click', performAction)
 /* Function to GET Web API Data*/
 
 const getWeather = async (zip) => {
@@ -54,7 +36,7 @@ const getWeather = async (zip) => {
 /* Function to POST data */
 const postData = async (url = '', data = {}) => {
 	console.log(data);
-	const response = await fetch('/info', {
+	const response = await fetch(url, {
 		method: 'POST',
 		credentials: 'same-origin',
 		headers: {
@@ -65,7 +47,8 @@ const postData = async (url = '', data = {}) => {
 
 	try {
 		const newData = await response.json();
-		console.log(newData);
+		console.log(`new data: ${newData}`);
+		return newData;
 	} catch (error) {
 		console.log('error', error);
 	}
@@ -73,20 +56,41 @@ const postData = async (url = '', data = {}) => {
 
 /* Function to GET Project Data */
 const getData = async (url = '') => {
-	fetch( url ).then( ( response ) => {
-		updateUI( response );
-	} ).catch( error => console.error( error ) );
+	const request = await fetch(url);
+
+	try {
+		const response = await request.json();
+		console.log('response', response);
+	} catch (error) {
+		console.log(error);
+	}
 };
 
-const updateUI = async (response) => {
-	const dateInput = document.querySelector( '.date-input' );
-	const tempInput = document.querySelector( '.temp-input' );
-	const userInput = document.querySelector( '.content-input' );
-	
-	const data = await response[ 0 ];
-	console.log( data );
-	
-		
-	
+/* Function called by event listener */
+const performAction = (e) => {
+	const zipCode = zip.value;
+	const userInput = input.value;
 
+	getWeather(zipCode).then((data) => {
+		let tempK = data.main.temp;
+		let temp = kelvinToF(tempK);
+		postData('/info', { temp: temp, input: userInput, date: newDate });
+
+		updateUI();
+	});
+};
+
+generate.addEventListener('click', performAction)
+
+const updateUI = async () => {
+	const request = await fetch('/all');
+	try {
+		const allData = await request.json()
+		console.log('all data', allData);
+		document.getElementById('temp-input').innerHTML = allData.temp;
+		document.getElementById('content-input').innerHTML = allData.input;
+		document.getElementById('date-input').innerHTML = allData.date;
+	} catch (error) {
+		console.log('error', error);
+	}
 };
